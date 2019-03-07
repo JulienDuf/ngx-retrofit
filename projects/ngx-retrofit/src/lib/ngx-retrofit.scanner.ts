@@ -20,4 +20,9 @@ export class NgxRetrofitScanner {
         const route = Reflect.getMetadata(ROUTE_CONFIG.replace('{property}', property), this.target.prototype);
         return route.query;
     }
+
+    public getParam(property: string): {[key: string]: number} {
+        const route = Reflect.getMetadata(ROUTE_CONFIG.replace('{property}', property), this.target.prototype);
+        return route.param;
+    }
 }
