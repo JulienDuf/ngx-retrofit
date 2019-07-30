@@ -3,5 +3,5 @@ export interface UriConfig {
     path: string;
     route: string;
     param?: {[key: string]: number};
-    query?: {[key: string]: number};
+    query?: {[key: string]: number} | number;
 }

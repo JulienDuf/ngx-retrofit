@@ -1,4 +1,4 @@
-import { VerbHandler } from '../handlers/verb.handler';
+import { VerbHandler } from '../../handlers/verb.handler';
 
 export function Put(route: string = ''): MethodDecorator {
     return (target, propertyKey) => {

@@ -73,7 +73,23 @@ describe('UriBuilder', () => {
             expect(uri).toEqual('http://localhost:4200/test?test=test&hello=world');
         });
 
-        it('build should return valid uri with query, path and rote config', () => {
+        it('build should return valid uri with query as an object and path config', () => {
+            const uri = UriBuilder.build({
+                host: 'http://localhost:4200',
+                path: 'test',
+                route: '',
+                query: 0
+            }, [
+                {
+                    test: 'test',
+                    hello: 'world'
+                }
+            ]);
+
+            expect(uri).toEqual('http://localhost:4200/test?test=test&hello=world');
+        });
+
+        it('build should return valid uri with query, path and route config', () => {
             const uri = UriBuilder.build({
                 host: 'http://localhost:4200',
                 path: 'test',

@@ -1,6 +1,6 @@
-import 'reflect-metadata';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import 'reflect-metadata';
 import { Observable } from 'rxjs';
 import { NGX_RETROFIT_CONFIG, NgxRetrofitConfig } from './ngx-retrofit.config';
 import { NgxRetrofitScanner } from './ngx-retrofit.scanner';
@@ -20,7 +20,7 @@ interface RequestConfig {
 
 @Injectable()
 export class NgxRetrofitBuilder {
-    private readonly verb: { [verb: string]: (config: RequestConfig) => (...arg: any[]) => Observable<unknown> };
+    private readonly verb: { [verb: string]: (config: RequestConfig, options: any) => (...arg: any[]) => Observable<unknown> };
 
     constructor(@Inject(NGX_RETROFIT_CONFIG) private config: NgxRetrofitConfig) {
         this.verb = {
@@ -43,7 +43,7 @@ export class NgxRetrofitBuilder {
                 path: scanner.getPath(),
                 route: scanner.getRoute(method),
                 query: scanner.getQuery(method)
-            });
+            }, scanner.getOptions(method));
         }
 
         const retrofit = new target.prototype.constructor() as Retrofit;
@@ -51,33 +51,33 @@ export class NgxRetrofitBuilder {
         return retrofit;
     }
 
-    private delete(config: RequestConfig): (...arg: any[]) => Observable<unknown> {
+    private delete(config: RequestConfig, options: any): (...arg: any[]) => Observable<unknown> {
         return function(...arg: any[]) {
-            return this.http.delete(UriBuilder.build(config, arg));
+            return this.http.delete(UriBuilder.build(config, arg), options);
         };
     }
 
-    private get(config: RequestConfig): (...arg: any[]) => Observable<unknown> {
+    private get(config: RequestConfig, options: any): (...arg: any[]) => Observable<unknown> {
         return function(...arg: any[]) {
-            return this.http.get(UriBuilder.build(config, arg));
+            return this.http.get(UriBuilder.build(config, arg), options);
         };
     }
 
-    private patch(config: RequestConfig): (...arg: any[]) => Observable<unknown> {
+    private patch(config: RequestConfig, options: any): (...arg: any[]) => Observable<unknown> {
         return function(...arg: any[]) {
-            return this.http.patch(UriBuilder.build(config, arg), config.body);
+            return this.http.patch(UriBuilder.build(config, arg), config.body, options);
         };
     }
 
-    private post(config: RequestConfig): (...arg: any[]) => Observable<unknown> {
+    private post(config: RequestConfig, options: any): (...arg: any[]) => Observable<unknown> {
         return function(...arg: any[]) {
-            return this.http.post(UriBuilder.build(config, arg), config.body);
+            return this.http.post(UriBuilder.build(config, arg), config.body, options);
         };
     }
 
-    private put(config: RequestConfig): (...arg: any[]) => Observable<unknown> {
+    private put(config: RequestConfig, options: any): (...arg: any[]) => Observable<unknown> {
         return function(...arg: any[]) {
-            return this.http.put(UriBuilder.build(config, arg), config.body);
+            return this.http.put(UriBuilder.build(config, arg), config.body, options);
         };
     }
 }

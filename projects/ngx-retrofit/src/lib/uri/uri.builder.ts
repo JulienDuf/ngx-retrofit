@@ -11,11 +11,28 @@ export class UriBuilder {
         return uri;
     }
 
-    private static addQuery(query: { [key: string]: number }, args: any[]): string {
+    private static addQuery(query: { [key: string]: number } | number, args: any[]): string {
         let uri = '';
-        if (!query) {
+        if (typeof query === 'undefined' || query === null) {
             return uri;
         }
+
+        if (typeof query === 'number') {
+            if (typeof args[query] !== 'object') {
+                return uri;
+            }
+
+            const data = args[query];
+            for (const key in data) {
+                if (!data.hasOwnProperty(key)) {
+                    continue;
+                }
+                uri += uri.length ? '&' : '?';
+                uri += `${key}=${data[key]}`;
+            }
+            return uri;
+        }
+
         for (const key in query) {
             if (!query.hasOwnProperty(key)) {
                 continue;

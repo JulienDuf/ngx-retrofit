@@ -1,5 +1,7 @@
 import 'reflect-metadata';
-import { PATH, ROUTE, ROUTE_CONFIG, VERB } from './constant';
+import { PATH, ROUTE, ROUTE_CONFIG, ROUTE_OPTIONS, VERB } from './constant';
+import { ObserveType } from './models/observe-type';
+import { ResponseType } from './models/response-type';
 
 export class NgxRetrofitScanner {
     constructor(private target: () => void) {}
@@ -24,5 +26,15 @@ export class NgxRetrofitScanner {
     public getParam(property: string): {[key: string]: number} {
         const route = Reflect.getMetadata(ROUTE_CONFIG.replace('{property}', property), this.target.prototype);
         return route.param;
+    }
+
+    public getOptions(property: string): any {
+        const options = Reflect.getMetadata(ROUTE_OPTIONS.replace('{property}', property), this.target.prototype) || {};
+        if (!options.responseType) {
+            options.responseType = ResponseType.Json;
+        }
+        if (!options.observe) {
+            options.observe = ObserveType.Body;
+        }
     }
 }

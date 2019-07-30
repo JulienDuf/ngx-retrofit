@@ -1,4 +1,4 @@
-import { VerbHandler } from '../handlers/verb.handler';
+import { VerbHandler } from '../../handlers/verb.handler';
 
 export function Patch(route: string = ''): MethodDecorator {
     return (target, propertyKey) => {
